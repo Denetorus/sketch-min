@@ -6,12 +6,10 @@ define('MODEL', ROOT.'/model');
 define('CONTROLLER', ROOT.'/controller');
 define('VENDOR', ROOT.'/vendor');
 define('SIGN', ROOT.'/sign');
-define('SKETCH', ROOT.'/vendor/sketch');
-define('SKETCH_EXT', ROOT.'/vendor/sketchExt');
+define('SKETCH', ROOT.'/vendor/denetorus/sketch');
+define('SKETCH_EXT', ROOT.'/vendor/denetorus/sketchExt');
 
-define('OJApi', 'https://admin.1-joule.com/rest/');
-
-require_once(VENDOR . '/AutoLoad.php');
+require_once(SKETCH . '/AutoLoad.php');
 
 header('Content-type: text/html');
 header('Access-Control-Allow-Origin: *');
@@ -22,7 +20,4 @@ if (isset($parse_url['query'])){
     parse_str($parse_url['query'], $_GET);
 }
 
-//$NewURI = strstr($_SERVER['REQUEST_URI'], '?', true);
-//if ($NewURI !== false) {
-//    $_SERVER['REQUEST_URI'] = $NewURI;
-//}
+

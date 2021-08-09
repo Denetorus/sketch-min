@@ -1,0 +1,15 @@
+{
+    "name": "denetorus/sketch-min",
+    "description": "Sketch php-framework with min settings",
+    "type": "project",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Mylnikov Denis",
+            "email": "gfc-com@mail.ru"
+        }
+    ],
+    "require": {
+        "denetorus/sketch":"dev-master@dev"
+    }
+}

@@ -1,5 +1,3 @@
 <?php
 
-echo "test";
-
-//include "../skWeb.php";
+include "../skWeb.php";

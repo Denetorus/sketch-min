@@ -12,9 +12,9 @@ if (!empty($_SERVER['argv'][0])){
     }
 }
 
-$_SERVER['REQUEST_URI'] = "/console/".$_SERVER['REQUEST_URI'];
+$_SERVER['REQUEST_URI'] = "/".$_SERVER['REQUEST_URI'];
 $_SESSION['status'] = 10;
 
 include 'skCommon.php';
 
-SK::run(ROOT . "/configConsole.json");
+SK::run(CONFIG . "/console.json");

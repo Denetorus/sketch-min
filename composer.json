@@ -10,6 +10,7 @@
         }
     ],
     "require": {
-        "denetorus/sketch":"dev-master@dev"
+        "denetorus/sketch":"dev-master@dev",
+        "ext-json": "*"
     }
 }

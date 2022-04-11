@@ -14,4 +14,5 @@ if ($_SERVER["USE_SESSIONS"]) {
     session_start();
 }
 
-SK::run(ROOT."/config.json");
+
+SK::run(CONFIG."/web.json");

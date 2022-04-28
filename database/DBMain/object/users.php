@@ -5,7 +5,6 @@ namespace database\DBMain\object;
 
 
 use database\DBMain\DB;
-//use sketch\database\DBSQL;
 use sketch\database\ObjectBase;
 
 class users extends ObjectBase

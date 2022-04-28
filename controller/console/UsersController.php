@@ -4,13 +4,13 @@
 namespace controller\console;
 
 
-use model\Users;
+use model\user;
 
 class UsersController
 {
     public function actionList()
     {
-          $user = new users();
+          $user = new user();
           echo "Users: \n";
           var_dump($user->getList());
           return "";
@@ -27,7 +27,7 @@ class UsersController
             return "";
         }
 
-        $user = new users();
+        $user = new user();
         $params = $user->getSignUpParams();
         $params['login'] = $login;
         $params['password'] = $password;
@@ -44,7 +44,7 @@ class UsersController
             return "";
         }
 
-        $user = new users();
+        $user = new user();
         $user->Delete($login);
         echo "user deleted: \n login: ".$login." \n";
         return "";

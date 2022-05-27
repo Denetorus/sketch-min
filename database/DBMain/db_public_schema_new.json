@@ -1,0 +1,100 @@
+{
+  "name": "public",
+  "tables": {
+    "user":{
+      "columns": {
+        "id": {
+          "uid": "id",
+          "db_type": "serial",
+          "type": "number",
+          "not_null": true,
+          "primary_key": true
+        },
+        "login": {
+          "uid": "login",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255,
+          "default": "",
+          "not_null": true,
+          "comment": ""
+        },
+        "password_hash": {
+          "uid": "password_hash",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255,
+          "not_null": true
+        },
+        "token": {
+          "uid": "token",
+          "db_type": "character varying",
+          "length": 255,
+          "type": "string",
+          "not_null": true
+        },
+        "status": {
+          "uid": "status",
+          "db_type": "smallint",
+          "type": "number",
+          "default": 1,
+          "not_null": true
+        },
+        "rights": {
+          "uid": "rights",
+          "db_type": "jsonb",
+          "type": "json"
+        },
+        "auth_key": {
+          "uid": "auth_key",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 36,
+          "not_null": true
+        },
+        "password_reset_token": {
+          "uid": "password_reset_token",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "email": {
+          "uid": "email",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "phone": {
+          "uid": "phone",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 100
+        },
+        "first_name": {
+          "uid": "first_name",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "last_name": {
+          "uid": "last_name",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "created_at": {
+          "uid": "created_at",
+          "db_type": "integer",
+          "type": "number",
+          "not_null": true
+        },
+        "updated_at": {
+          "uid": "updated_at",
+          "db_type": "integer",
+          "type": "number",
+          "not_null": true
+        }
+      }
+    }
+  }
+}

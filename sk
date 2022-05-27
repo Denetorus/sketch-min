@@ -13,8 +13,15 @@ if (!empty($_SERVER['argv'][0])){
 }
 
 $_SERVER['REQUEST_URI'] = "/".$_SERVER['REQUEST_URI'];
-$_SESSION['status'] = 10;
 
 include 'skCommon.php';
 
-SK::run(CONFIG . "/console.json");
+try {
+    SK::run(CONFIG . "/console.json");
+} catch (\sketch\exceptions\ExceptionRouterModelNotChosen $e) {
+    echo "\e[0;31mError: router model not chosen\e[0m\n";
+} catch (\sketch\exceptions\ExceptionSignModelNotChosen $e) {
+    echo "\e[0;31mError: sign model not chosen\e[0m\n";
+} catch (\sketch\exceptions\ExceptionSignOptionsNotCorrect $e) {
+    echo "\e[0;31mError: sign option not correct\e[0m\n";
+}

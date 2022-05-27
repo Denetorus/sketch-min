@@ -3,18 +3,17 @@
 namespace sign;
 
 use sketch\sign\SignBase;
-use sketch\sign\model\SignDBModel;
 use database\DBMain\DB;
 use database\DBMain\object\users;
 
 class SignWeb extends SignBase
 {
 
-    public function options()
+    public function options():array
     {
 
         return [
-            'class' => new SignDBModel,
+            'class' => 'sketch\sign\model\SignDBModel',
             'db' => new DB,
             'user' => new users()
         ];

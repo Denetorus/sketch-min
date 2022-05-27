@@ -2,32 +2,27 @@
 
 namespace router;
 
-use sketch\router\RouterBase;
-
-class RouterConsole extends RouterBase
+class RouterConsole extends \sketch\router\RouterConsole
 {
 
-    public function routesAvailableWithoutSignIn(){
+    public function routes():array
+    {
         return [
 
             'test' => [
-                'path' => 'test',
-                'status' => -1
+                'internal' => true,
             ],
 
             'props' => [
                 'path' => 'test/props',
-                'status' => -1
             ],
 
             'migrate' => [
-                'path' => 'migrate',
-                'status' => -1
+                'internal' => true,
             ],
 
             'users' => [
-                'path' => 'users',
-                'status' => -1
+                'internal' => true,
             ],
 
         ];

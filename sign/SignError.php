@@ -7,10 +7,10 @@ use sketch\sign\SignBase;
 
 class SignError extends SignBase
 {
-    public function options()
+    public function options():array
     {
         return [
-            'class' => new SignErrorModel(),
+            'class' => 'sketch\sign\model\SignErrorModel',
         ];
 
     }

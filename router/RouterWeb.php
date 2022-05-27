@@ -2,12 +2,11 @@
 
 namespace router;
 
-use sketch\router\RouterBase;
-
-class RouterWeb extends RouterBase
+class RouterWeb extends \sketch\router\RouterWeb
 {
 
-    public function routesAvailableWithoutSignIn(){
+    public function routes():array
+    {
         return [
 
             '' => [

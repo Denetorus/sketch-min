@@ -8,7 +8,7 @@ class TestController
 {
     public function actionIndex()
     {
-        return "console test console is execute";
+        return "\e[1;33mConsole test is execute\e[0m\n";
     }
 
     public function actionProps(){

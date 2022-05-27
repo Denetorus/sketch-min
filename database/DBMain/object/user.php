@@ -5,24 +5,32 @@ namespace database\DBMain\object;
 
 
 use database\DBMain\DB;
-use sketch\database\ObjectBase;
+use sketch\database\DBRecord\ObjectBase;
+use sketch\database\UUID;
 
-class users extends ObjectBase
+class user extends ObjectBase
 {
 
-    public $table = "users";
-    private $StatusBlocked=-1;
-    private $StatusNotActivate=0;
-    private $StatusActivate=1;
+    public $table = "user";
+    private $statuses = [
+        'blocked' => -1,
+        'registration' => 0,
+        'activated' => 1
+    ];
 
-
-    public function __construct($id=null)
+    public function setDB(): void
     {
         $this->db = DB::getInstance();
-        parent::__construct($id);
     }
 
-    public function getRegistrationParams(){
+    public function generatePasswordHash(string $password):string
+    {
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+
+    public function getRegistrationParams():array
+    {
         return [
             'login' => "",
             'password' => "",
@@ -32,36 +40,41 @@ class users extends ObjectBase
         ];
     }
 
-    public function getUpdateInfoParams(){
+    public function getUpdateInfoParams():array
+    {
         return [
             'first_name' => "",
             'last_name' => "",
         ];
     }
 
-    public function registration($params)
+    public function registration($params): void
     {
-        $this->props['auth_key'] = ($params['auth_key'] === null)
-                                        ? $this->db->createUUID()
-                                        : $params['auth_key'];
+        $this->props['auth_key'] = $params['auth_key'] ?? UUID::createUUID();
 
         $this->props['login']=$params['login'];
-        $this->props['password_hash']=password_hash($params['password'], PASSWORD_DEFAULT);
-        $this->props['first_name']=$params['first_name'];
-        $this->props['last_name']=$params['last_name'];
-        $this->props['status']=$this->StatusNotActivate;
+        $this->props['password_hash']=$this->generatePasswordHash($params['password']);
+        $this->props['first_name']=$params['first_name'] ?? '';
+        $this->props['last_name']=$params['last_name'] ?? '';
+        $this->props['status']=$this->statuses['registration'];
         $this->props['created_at']=time();
         $this->props['updated_at']=$this->props['created_at'];
 
         $this->save();
     }
 
-    public function updateInfo($params)
+
+    public function updateInfo($params):void
     {
 
-        $this->props['first_name']=$params['first_name'];
-        $this->props['last_name']=$params['last_name'];
-        $this->props['status']=$params['status'];
+        if ($params['first_name'])
+            $this->props['first_name']=$params['first_name'];
+        if ($params['last_name'])
+            $this->props['last_name']=$params['last_name'];
+        if ($params['status'])
+            $this->props['status']=$params['status'];
+        if ($params['rights'])
+            $this->props['rights']=$params['rights'];
 
         $this->props['updated_at']=time();
 
@@ -69,7 +82,7 @@ class users extends ObjectBase
 
     }
 
-    public function updateLogin($login)
+    public function updateLogin($login):void
     {
 
         $this->props['login']=$login;
@@ -79,48 +92,50 @@ class users extends ObjectBase
 
     }
 
-    public function updatePassword($password)
+    public function updatePassword($password):void
     {
 
-        $this->props['password_hash']=password_hash($password, PASSWORD_DEFAULT);
+        $this->props['password_hash']=$this->generatePasswordHash($password);
         $this->props['updated_at']=time();
 
         $this->update();
 
     }
 
-    public function loadByLogin($login)
+
+    public function loadByLogin($login):void
     {
-        $result = $this->db->getRecord($this->table, ["login"=>$login]);
-        $this->props = ($result!==false) ? $result : null;
+        $this->props = $this->db->getRecord($this->table, ["login"=>$login]);
     }
 
-    public function deleteByLogin($login)
+    public function deleteByLogin($login):void
     {
         $this->db->deleteRecord($this->table, ["login"=>$login]);
     }
 
-    public function activateByLogin($login, $start, $finish)
+
+    public function activateByLogin($login)
     {
         $this->db->updateRecord($this->table, ["login"=>$login],
             [
-                "status"=>$this->StatusActivate,
+                "status"=>$this->statuses['activated'],
             ]);
     }
 
     public function deactivateByLogin($login)
     {
         $this->db->updateRecord($this->table, ["login"=>$login],
-            ["status"=>$this->StatusNotActivate]);
+            ["status"=>$this->statuses['registration']]);
     }
 
     public function blockByLogin($login)
     {
         $this->db->updateRecord($this->table, ["login"=>$login],
-            ["status"=>$this->StatusBlocked]);
+            ["status"=>$this->statuses['blocked']]);
     }
 
-    public function getListWithExtension($sorts=[], $filters=[])
+
+    public function getListWithExtension($sorts=[], $filters=[]): array
     {
         $query_params = [];
         $query_text =
@@ -168,10 +183,9 @@ class users extends ObjectBase
             $query_text .= " ORDER BY " . $sort_text;
         }
 
-        //var_dump($query_text);
-
         return $this->db->select($query_text, $query_params);
 
     }
+
 
 }

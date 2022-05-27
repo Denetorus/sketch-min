@@ -4,11 +4,11 @@
 namespace controller\console;
 
 
-use model\user;
+use database\DBMain\object\user;
 
 class UsersController
 {
-    public function actionList()
+    public function actionList():string
     {
           $user = new user();
           echo "Users: \n";
@@ -16,7 +16,7 @@ class UsersController
           return "";
     }
 
-    public function actionAdd($login="", $password="")
+    public function actionAdd($login="", $password=""):string
     {
         if ($login==="") {
             echo "login is empty";
@@ -28,16 +28,16 @@ class UsersController
         }
 
         $user = new user();
-        $params = $user->getSignUpParams();
+        $params = $user->getRegistrationParams();
         $params['login'] = $login;
         $params['password'] = $password;
         $params['auth_key'] = null;
-        $user->SignUp($params);
+        $user->registration($params);
         echo "Add user: \n login: ".$login." \n password: ".$password." \n";
         return "";
     }
 
-    public function actionDelete($login="")
+    public function actionDelete($login=""):string
     {
         if ($login==="") {
             echo "login is empty";
@@ -45,7 +45,7 @@ class UsersController
         }
 
         $user = new user();
-        $user->Delete($login);
+        $user->deleteByLogin($login);
         echo "user deleted: \n login: ".$login." \n";
         return "";
     }

@@ -25,51 +25,49 @@ Make 2 files in config directory, filling DB information:
 
 console.json
 
-        {
-            "default": {
-                "controllers_path": "console",
-                "router": "router\\RouterConsole",
-                "path": "console",
-                "sign": "sign\\SignConsole"
-            },
-
-            "props":{
-                "db_params": {
-                    "dsn": "pgsql:host=hostname;port=5432;dbname=DBNAME",
-                    "user": "DBUserName",
-                    "password": "DBPassword"
-                }
-        
-            }
+    {
+      "routers": {
+        "default": {
+        "controller_path": "console",
+        "router": "router\\RouterConsole",
+        "path": "console",
+        "sign": "sign\\SignConsole"
         }
+      },
+      "props":{
+        "db_params": {
+        "dsn": "pgsql:host=localhost;port=5432;dbname=dbname",
+        "user": "postgres",
+        "password": "admin"
+        }
+      }
+    }
 
 web.json
 
-        {
-            "default": {
-                "controllers_path": "web",
-                "router": "router\\RouterWeb",
-                "sign": "sign\\SignWeb"
-            },
-
-            "routers": [
-                {
-                    "path": "rest",
-                    "router": "router\\RouterRest",
-                    "sign": "sign\\SignWeb"
-                }
-            ],
-        
-            "props":{
-                "db_params": {
-                    "dsn": "pgsql:host=hostname;port=5432;dbname=DBNAME",
-                    "user": "DBUserName",
-                    "password": "DBPassword"
-                }
-        
-            }
+    {
+      "routers": {
+        "default": {
+          "controllers_path": "web",
+          "router": "router\\RouterWeb",
+          "sign": "sign\\SignWeb",
+          "use_status": true,
+          "sign_in_path": "signin",
+          "error_path": "error/error_404"
+        },
+        "rest": {
+          "controllers_path": "rest",
+          "router": "router\\RouterRest"
         }
-
+      },
+      "props":{
+        "db_params": {
+        "dsn": "pgsql:host=localhost;port=5432;dbname=dbname",
+        "user": "postgres",
+        "password": "admin"
+        }
+      }
+    }
 
 
 

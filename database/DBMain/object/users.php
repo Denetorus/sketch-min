@@ -8,10 +8,10 @@ use database\DBMain\DB;
 use sketch\database\DBRecord\ObjectBase;
 use sketch\database\UUID;
 
-class user extends ObjectBase
+class users extends ObjectBase
 {
 
-    public $table = "user";
+    public $table = "users";
     private $statuses = [
         'blocked' => -1,
         'registration' => 0,

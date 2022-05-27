@@ -12,7 +12,7 @@ class migrate_20220527091217 extends ObjectMigration
     "name": "public",
     "tables": {
         "toAdd": {
-            "user": {
+            "users": {
                 "columns": {
                     "id": {
                         "name": "id",

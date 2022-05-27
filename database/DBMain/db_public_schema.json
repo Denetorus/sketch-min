@@ -1,7 +1,7 @@
 {
   "name": "public",
   "tables": {
-    "user":{
+    "users":{
       "columns": {
         "id": {
           "uid": "id",

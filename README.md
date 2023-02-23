@@ -48,7 +48,7 @@ web.json
     {
       "routers": {
         "default": {
-          "controllers_path": "web",
+          "controller_path": "web",
           "router": "router\\RouterWeb",
           "sign": "sign\\SignWeb",
           "use_status": true,

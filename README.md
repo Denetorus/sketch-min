@@ -56,7 +56,7 @@ web.json
           "error_path": "error/error_404"
         },
         "rest": {
-          "controllers_path": "rest",
+          "controller_path": "rest",
           "router": "router\\RouterRest"
         }
       },

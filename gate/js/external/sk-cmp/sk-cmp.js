@@ -21,9 +21,10 @@ const _renderHTML = function (){
 }
 const notRender = function (){}
 
-const SCMix = {
+export const SCMix = {
 
     onStart: function(props){
+        this.isSketchComponent = true;
         this.used = true;
         this.rendered = false;
         this.items = [];
@@ -193,13 +194,41 @@ const SCMix = {
         }
         for (const key of Object.keys(this.items)) {
             const item = this.items[key];
-            if (typeof item === 'string'){
+            this._renderItem(objParent, item)
+        }
+    },
+
+    _renderItem: function (objParent, item){
+
+        if (item===undefined || item===null)
+            return;
+
+        switch (typeof item){
+
+            case 'string':
+            case 'number':
+            case 'boolean':{
                 objParent.append(item);
-            }else{
-                if (item.used)
-                    objParent.appendChild(item);
+                return;
+            }
+            case 'object': {
+
+                if (item.isSketchComponent){
+                    objParent.appendChild(item)
+                    return;
+                }
+
+                if (Object.prototype.toString.call(item) === '[object Array]'){
+                    item.forEach(subItem=>{
+                        this._renderItem(objParent, subItem)
+                    })
+                    return;
+                }
+
+                objParent.append(item.toString())
             }
         }
+
     },
 
     getComponentName: function (){
@@ -241,11 +270,24 @@ export class SCForm extends HTMLFormElement{
 mixin(SCForm, SCMix);
 customElements.define('sc-form', SCForm, {extends: 'form'})
 
+export class SCA extends HTMLAnchorElement{
+    constructor(href, props={}) {
+        super();
+        this.setAttribute('href', href);
+        this.setAttribute("is", "sc-a")
+        this.onStart(props)
+    }
+    onStart(props){}
+}
+mixin(SCA, SCMix);
+customElements.define('sc-a', SCA, {extends: 'a'})
+
 export class SCHTML extends SCDiv{
     constructor(props={}) {
         super(props);
         this.setAttribute("is", "sc-html");
     }
+    
 }
 SCHTML.prototype._render = _renderHTML;
 customElements.define('sc-html', SCHTML, {extends: 'div'})
@@ -255,7 +297,7 @@ export class SCSVGBox extends SCHTML{
         super({
             items:[svgHtml]
         });
-        this.setAttribute("is", "sc-html");
+        this.setAttribute("is", "sc-svg");
         this.propsSVG = propsSVG;
         if (props)
             this.fillProps(props);
@@ -315,6 +357,17 @@ export class SCInput extends HTMLInputElement{
         this.id = id;
         this.onStart(props);
     }
+    
+    /**
+     *
+     * @returns {string|number|boolean|Date}
+     */
+    getValue(){
+        return this.value;
+    }
+    setValue(value){
+        this.value = value;
+    }
     onStart(props){}
     render(){}
 }
@@ -340,8 +393,22 @@ customElements.define('sc-input-number', SCInputNumber, {extends: 'input'})
 export class SCInputDate extends SCInput{
     constructor(value, name, id, props) {
         super(value, 'date', name, id, props);
+        if (typeof value === "object"){
+            this.valueAsDate = value;
+        }
         this.setAttribute("is", "sc-input-date");
     }
+    getValue(){
+        return this.valueAsDate;
+    }
+    setValue(value){
+        if (typeof value === "object"){
+            this.valueAsDate = value;
+            return;
+        }
+        this.value = value;
+    }
+    
 }
 customElements.define('sc-input-date', SCInputDate, {extends: 'input'})
 

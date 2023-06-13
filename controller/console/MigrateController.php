@@ -94,9 +94,9 @@ use sketch\database\schema\ObjectMigration;"
 
 namespace database\DBMain\object;
 
-use database\DBMain\ObjectMyWithId;
+use database\DBMain\DBObject;
 
-class $class_name extends ObjectMyWithId
+class $class_name extends DBObject
 {
 
     public \$table_name = "$table_name";
@@ -138,14 +138,15 @@ EOT;
 
 namespace controller\\rest;
 
+use database\DBMain\DBObject;
 use database\DBMain\object\\$table_name;
 
-class $class_name extends ControllerRestMyWithId
+class $class_name extends ControllerRestSK
 {
 
-    public function getNewObject(\$id=-1, \$notCreated=false): $table_name
+    public function getNewObject(\$ref=null, \$notCreated=false): DBObject
     {
-        return new $table_name(\$id);
+        return new $table_name(\$ref);
     }
 }
 EOT;

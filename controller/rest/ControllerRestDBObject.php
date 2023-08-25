@@ -6,7 +6,11 @@ use database\DBMain\DBObject;
 use sketch\controller\ControllerRest;
 use sketch\rest\RequestResult;
 
+<<<<<<< HEAD
 abstract class ControllerRestDBObject extends ControllerRest
+=======
+abstract class ControllerRestSK extends ControllerRest
+>>>>>>> origin/master
 {
 
     public function allowMethods(): string
@@ -65,6 +69,7 @@ abstract class ControllerRestDBObject extends ControllerRest
 
         if($PKey!==null){
             $obj = $this->getNewObject($PKey);
+<<<<<<< HEAD
             if(isset($_GET['main'])){
                 $result->insertData([
                     'ref' => $obj->props[$this->getRefAttrName()],
@@ -73,6 +78,9 @@ abstract class ControllerRestDBObject extends ControllerRest
             }else{
                 $result->insertData($obj->props);
             }
+=======
+            $result->insertData($obj->props);
+>>>>>>> origin/master
         }else if(isset($_GET['for_select'])){
             $result->insertData($this->getListForSelect());
         }else{
@@ -83,13 +91,17 @@ abstract class ControllerRestDBObject extends ControllerRest
 
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/master
     public function actionPost()
     {
 
         $result = new RequestResult();
 
+<<<<<<< HEAD
         $gottenSorts = [];
         $gottenFilters = [];
 
@@ -102,6 +114,24 @@ abstract class ControllerRestDBObject extends ControllerRest
             if (isset($settings->filters)){
                 $gottenFilters = $settings->filters;
             }
+=======
+        $entityBody = json_decode(file_get_contents('php://input'));
+
+        $gottenSorts = [];
+        if (isset($_POST['sorts'])){
+            $gottenSorts = json_decode($_POST['sorts']);
+        }
+        if (isset($entityBody->sorts)){
+            $gottenSorts = json_decode($entityBody->sorts);
+        }
+
+        $gottenFilters = [];
+        if (isset($_POST['filters'])){
+            $gottenFilters = json_decode($_POST['filters']);
+        }
+        if (isset($entityBody->filters)){
+            $gottenFilters = json_decode($entityBody->filters);
+>>>>>>> origin/master
         }
 
         if(isset($_GET['for_select'])){
@@ -140,6 +170,7 @@ abstract class ControllerRestDBObject extends ControllerRest
         $postData = file_get_contents('php://input');
         $data = json_decode($postData, true);
 
+<<<<<<< HEAD
         $refAttrName = $this->getRefAttrName();
         $ref = $this->getPKeyFromGetParams();
         if ($ref===null or $ref!==""){
@@ -147,6 +178,9 @@ abstract class ControllerRestDBObject extends ControllerRest
                 $ref = $data[$refAttrName];
             }
         }
+=======
+        $ref = $this->getPKeyFromGetParams();
+>>>>>>> origin/master
         if($ref!==null and $ref!==""){
 
             $obj = $this->getNewObject($ref);
@@ -156,11 +190,19 @@ abstract class ControllerRestDBObject extends ControllerRest
 
         }else{
 
+<<<<<<< HEAD
             unset($data[$refAttrName]);
             $obj = $this->getNewObject();
             $this->fillObjByProps($obj->props, $data);
             $answer = $obj->save();
             $result->insertData(['result' => 1, 'ref' => $answer[$refAttrName]]);
+=======
+            unset($data['uid']);
+            $obj = $this->getNewObject();
+            $this->fillObjByProps($obj->props, $data);
+            $answer = $obj->save();
+            $result->insertData(['result' => 1, 'ref' => $answer]);
+>>>>>>> origin/master
 
         }
 

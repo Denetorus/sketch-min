@@ -1,26 +1,36 @@
-import {
-    DBFieldDescriptionDate, DBFieldDescriptionId,
-    DBFieldDescriptionNumber,
-    DBFieldDescriptionObject,
-    DBFieldDescriptionString
-} from "../external/db/DBObject.js";
+import {DBFieldDescriptionObject, DBFieldDescriptionString} from "../external/sk-cmp/sk-cmp-db-objects.js";
+
 
 export const ObjectAttributes = {
-    animals: {
-        id: new DBFieldDescriptionId({title: 'ИД'}),
-        description: new DBFieldDescriptionString({title: 'Наименование'}),
-        code: new DBFieldDescriptionNumber({title: 'Код'}),
-        animal_type: new DBFieldDescriptionObject({title: 'Тип', refTable: "animal_types"}),
-        breed: new DBFieldDescriptionObject({title: 'Порода', refTable: "breeds"}),
-        color: new DBFieldDescriptionString({title: 'Цвет'}),
-        created_at: new DBFieldDescriptionNumber({show: false}),
-        updated_at: new DBFieldDescriptionNumber({show: false}),
+    city_types: {
+        uid: new DBFieldDescriptionString({isKey: true, title: 'uid', show: false}),
+        code: new DBFieldDescriptionString({title: 'code'}),
+        description: new DBFieldDescriptionString({title: 'title'}),
     },
-    animal_types: {
-        id: new DBFieldDescriptionId({title: 'ИД'}),
-        code: new DBFieldDescriptionNumber({title: 'Код'}),
-        description: new DBFieldDescriptionString({title: 'Наименование'}),
-        created_at: new DBFieldDescriptionNumber({show: false}),
-        updated_at: new DBFieldDescriptionNumber({show: false}),
-    }
+    region_types: {
+        uid: new DBFieldDescriptionString({isKey: true, title: 'uid', show: false}),
+        code: new DBFieldDescriptionString({title: 'code'}),
+        description: new DBFieldDescriptionString({title: 'title'}),
+    },
+    street_types: {
+        uid: new DBFieldDescriptionString({isKey: true, title: 'uid', show: false}),
+        code: new DBFieldDescriptionString({title: 'code'}),
+        description: new DBFieldDescriptionString({title: 'title'}),
+    },
+    countries: {
+        uid: new DBFieldDescriptionString({isKey: true, title: 'uid', show: false}),
+        code: new DBFieldDescriptionString({title: 'code'}),
+        description: new DBFieldDescriptionString({title: 'title'}),
+        cca2: new DBFieldDescriptionString({title: 'cca2'}),
+        cca3: new DBFieldDescriptionString({title: 'cca3'}),
+        ccn3: new DBFieldDescriptionString({title: 'ccn3'}),
+        international_name: new DBFieldDescriptionString({title: 'international_name'}),
+    },
+    regions: {
+        uid: new DBFieldDescriptionString({isKey: true, title: 'uid', show: false}),
+        code: new DBFieldDescriptionString({title: 'code'}),
+        description: new DBFieldDescriptionString({title: 'title'}),
+        region_type: new DBFieldDescriptionObject({title: 'region_type', refTable: 'region_types'}),
+        country: new DBFieldDescriptionObject({title: 'country', refTable: 'countries'}),
+    },
 }

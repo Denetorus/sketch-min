@@ -1,100 +1,413 @@
 {
   "name": "public",
   "tables": {
-    "users":{
+
+    "city_types": {
+      "presentation": "description",
       "columns": {
-        "id": {
-          "uid": "id",
-          "db_type": "serial",
-          "type": "number",
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
           "not_null": true,
-          "primary_key": true
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
         },
-        "login": {
-          "uid": "login",
-          "db_type": "character varying",
-          "type": "string",
-          "length": 255,
-          "default": "",
-          "not_null": true,
-          "comment": ""
-        },
-        "password_hash": {
-          "uid": "password_hash",
-          "db_type": "character varying",
-          "type": "string",
-          "length": 255,
-          "not_null": true
-        },
-        "token": {
-          "uid": "token",
-          "db_type": "character varying",
-          "length": 255,
-          "type": "string",
-          "not_null": true
-        },
-        "status": {
-          "uid": "status",
-          "db_type": "smallint",
-          "type": "number",
-          "default": 1,
-          "not_null": true
-        },
-        "rights": {
-          "uid": "rights",
-          "db_type": "jsonb",
-          "type": "json"
-        },
-        "auth_key": {
-          "uid": "auth_key",
-          "db_type": "character varying",
-          "type": "string",
-          "length": 36,
-          "not_null": true
-        },
-        "password_reset_token": {
-          "uid": "password_reset_token",
+        "description": {
+          "uid": "description",
           "db_type": "character varying",
           "type": "string",
           "length": 255
         },
-        "email": {
-          "uid": "email",
+        "code": {
+          "uid": "code",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        }
+      }
+    },
+    "region_types": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "description": {
+          "uid": "description",
           "db_type": "character varying",
           "type": "string",
           "length": 255
         },
-        "phone": {
-          "uid": "phone",
+        "code": {
+          "uid": "code",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        }
+      }
+    },
+    "street_types": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "description": {
+          "uid": "description",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "code": {
+          "uid": "code",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        }
+      }
+    },
+    "countries": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "description": {
+          "uid": "description",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "code": {
+          "uid": "code",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "cca2": {
+          "uid": "cca2",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "cca3": {
+          "uid": "cca3",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "ccn3": {
+          "uid": "ccn3",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "international_name": {
+          "uid": "international_name",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        }
+
+      }
+    },
+    "regions": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "description": {
+          "uid": "description",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "code": {
+          "uid": "code",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "region_type": {
+          "uid": "region_type",
+          "db_type": "uuid",
+          "type": "ref",
+          "refTable": "region_types",
+          "refColumn": "uid"
+        },
+        "country": {
+          "uid": "country",
+          "db_type": "uuid",
+          "type": "ref",
+          "refTable": "countries",
+          "refColumn": "uid"
+        }
+      }
+    },
+    "legal_forms": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "description": {
+          "uid": "description",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "code": {
+          "uid": "code",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        }
+      }
+    },
+    "contractor_types": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "description": {
+          "uid": "description",
           "db_type": "character varying",
           "type": "string",
           "length": 100
+        }
+      }
+    },
+    "contractors": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "description": {
+          "uid": "description",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "code": {
+          "uid": "code",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 15
+        },
+        "full_name": {
+          "uid": "full_name",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "short_name": {
+          "uid": "short_name",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 100
+        },
+        "legal_person_name": {
+          "uid": "legal_person_name",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 100
+        },
+        "legal_form": {
+          "uid": "legal_form",
+          "db_type": "uuid",
+          "type": "ref",
+          "refTable": "legal_forms",
+          "refColumn": "uid"
+        },
+        "contractor_type": {
+          "uid": "contractor_type",
+          "db_type": "uuid",
+          "type": "ref",
+          "refTable": "contractor_types",
+          "refColumn": "uid"
+        }
+      },
+      "tables": {
+        "economic_activities": {
+          "refTable": "contractor_economic_activities",
+          "refColumn": "uid",
+          "connectColumn": "contractor_uid"
+        },
+        "requests": {
+          "refTable": "contractor_requests",
+          "refColumn": "uid",
+          "connectColumn": "contractor_uid"
+        }
+      }
+    },
+    "contractor_economic_activities": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "contractor_uid": {
+          "uid": "contractor",
+          "db_type": "uuid",
+          "type": "ref",
+          "refTable": "contractors",
+          "refColumn": "uid"
+        },
+        "description": {
+          "uid": "description",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "code": {
+          "uid": "code",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 20
+        },
+        "is_main": {
+          "uid": "is_main",
+          "db_type": "boolean",
+          "type": "boolean"
+        }
+      }
+    },
+    "contractor_requests": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "contractor_uid": {
+          "uid": "contractor",
+          "db_type": "uuid",
+          "type": "ref",
+          "refTable": "contractors",
+          "refColumn": "uid"
+        },
+        "description": {
+          "uid": "description",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "request_date": {
+          "uid": "request_date",
+          "db_type": "timestamp",
+          "type": "datetime"
+        },
+        "content": {
+          "uid": "content",
+          "db_type": "text",
+          "type": "text"
+        }
+      }
+    },
+    "contractor_workers": {
+      "presentation": "description",
+      "columns": {
+        "uid": {
+          "uid": "uid",
+          "db_type": "uuid",
+          "type": "uuid",
+          "not_null": true,
+          "primary_key": true,
+          "default": "uuid_generate_v4()"
+        },
+        "contractor_uid": {
+          "uid": "contractor",
+          "db_type": "uuid",
+          "type": "ref",
+          "refTable": "contractors",
+          "refColumn": "uid"
+        },
+        "description": {
+          "uid": "description",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 255
+        },
+        "name": {
+          "uid": "name",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 15
         },
         "first_name": {
           "uid": "first_name",
           "db_type": "character varying",
           "type": "string",
-          "length": 255
+          "length": 25
         },
         "last_name": {
           "uid": "last_name",
           "db_type": "character varying",
           "type": "string",
-          "length": 255
+          "length": 15
         },
-        "created_at": {
-          "uid": "created_at",
-          "db_type": "integer",
-          "type": "number",
-          "not_null": true
+        "email": {
+          "uid": "email",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 50
         },
-        "updated_at": {
-          "uid": "updated_at",
-          "db_type": "integer",
-          "type": "number",
-          "not_null": true
+        "phones": {
+          "uid": "phones",
+          "db_type": "character varying",
+          "type": "string",
+          "length": 50
         }
       }
     }
+
   }
 }

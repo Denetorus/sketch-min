@@ -12,19 +12,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Denetorus/sketch.git",
-                "reference": "9bc3f3ac363580ae062fc8179ef8e5036adface3"
+                "reference": "b96b7f5a5cbf33565dfe97015fd02c64f2d3338f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Denetorus/sketch/zipball/9bc3f3ac363580ae062fc8179ef8e5036adface3",
-                "reference": "9bc3f3ac363580ae062fc8179ef8e5036adface3",
+                "url": "https://api.github.com/repos/Denetorus/sketch/zipball/b96b7f5a5cbf33565dfe97015fd02c64f2d3338f",
+                "reference": "b96b7f5a5cbf33565dfe97015fd02c64f2d3338f",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-pdo": "*",
                 "ext-pdo_pgsql": "*",
-                "php": "^7.2"
+                "php": ">=7.2"
             },
             "default-branch": true,
             "type": "project",
@@ -43,7 +43,7 @@
                 "issues": "https://github.com/Denetorus/sketch/issues",
                 "source": "https://github.com/Denetorus/sketch/tree/master"
             },
-            "time": "2022-05-27T06:28:04+00:00"
+            "time": "2023-06-13T10:27:34+00:00"
         }
     ],
     "packages-dev": [],
@@ -58,5 +58,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }

@@ -86,9 +86,6 @@ use sketch\database\schema\ObjectMigration;"
                 if (isset($column['refTable'])) {
                     $objectTable .='"refTable" => "'.$column['refTable'].'",';
                 }
-                if (isset($column['refColumn'])) {
-                    $objectTable .='"refColumn" => "'.$column['refColumn'].'",';
-                }
                 $objectTable .='],'.PHP_EOL;
             }
             $objectTable .='         ]';
@@ -97,9 +94,9 @@ use sketch\database\schema\ObjectMigration;"
 
 namespace database\DBMain\object;
 
-use database\DBMain\DBObject;
+use database\DBMain\ObjectMyWithId;
 
-class $class_name extends DBObject
+class $class_name extends ObjectMyWithId
 {
 
     public \$table_name = "$table_name";
@@ -141,15 +138,14 @@ EOT;
 
 namespace controller\\rest;
 
-use database\\DBMain\\DBObject;
-use database\\DBMain\\object\\$table_name;
+use database\DBMain\object\\$table_name;
 
-class $class_name extends ControllerRestDBObject
+class $class_name extends ControllerRestMyWithId
 {
 
-    public function getNewObject(\$ref=null, \$notCreated=false): DBObject
+    public function getNewObject(\$id=-1, \$notCreated=false): $table_name
     {
-        return new $table_name(\$ref);
+        return new $table_name(\$id);
     }
 }
 EOT;

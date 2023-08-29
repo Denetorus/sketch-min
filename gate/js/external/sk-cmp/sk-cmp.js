@@ -21,10 +21,9 @@ const _renderHTML = function (){
 }
 const notRender = function (){}
 
-export const SCMix = {
+const SCMix = {
 
     onStart: function(props){
-        this.isSketchComponent = true;
         this.used = true;
         this.rendered = false;
         this.items = [];
@@ -168,6 +167,7 @@ export const SCMix = {
         this.items = [];
     },
 
+
     clearRender: function (){
         const objParent = (this.shadowRootRef) ? this.shadowRootRef : this;
         objParent.innerHTML = '';
@@ -193,43 +193,13 @@ export const SCMix = {
         }
         for (const key of Object.keys(this.items)) {
             const item = this.items[key];
-            this._renderItem(objParent, item)
-        }
-    },
-
-    _renderItem: function (objParent, item){
-
-        if (item===undefined || item===null)
-            return;
-
-        switch (typeof item){
-
-            case 'string':
-            case 'number':
-            case 'boolean':{
+            if (typeof item === 'string'){
                 objParent.append(item);
-                return;
-            }
-            case 'object': {
-
-                if (item.isSketchComponent){
-                    if (item.used){
-                        objParent.appendChild(item)
-                    }
-                    return;
-                }
-
-                if (Object.prototype.toString.call(item) === '[object Array]'){
-                    item.forEach(subItem=>{
-                        this._renderItem(objParent, subItem)
-                    })
-                    return;
-                }
-
-                objParent.append(item.toString())
+            }else{
+                if (item.used)
+                    objParent.appendChild(item);
             }
         }
-
     },
 
     getComponentName: function (){
@@ -271,24 +241,11 @@ export class SCForm extends HTMLFormElement{
 mixin(SCForm, SCMix);
 customElements.define('sc-form', SCForm, {extends: 'form'})
 
-export class SCA extends HTMLAnchorElement{
-    constructor(href, props={}) {
-        super();
-        this.setAttribute('href', href);
-        this.setAttribute("is", "sc-a")
-        this.onStart(props)
-    }
-    onStart(props){}
-}
-mixin(SCA, SCMix);
-customElements.define('sc-a', SCA, {extends: 'a'})
-
 export class SCHTML extends SCDiv{
     constructor(props={}) {
         super(props);
         this.setAttribute("is", "sc-html");
     }
-    
 }
 SCHTML.prototype._render = _renderHTML;
 customElements.define('sc-html', SCHTML, {extends: 'div'})
@@ -298,7 +255,7 @@ export class SCSVGBox extends SCHTML{
         super({
             items:[svgHtml]
         });
-        this.setAttribute("is", "sc-svg");
+        this.setAttribute("is", "sc-html");
         this.propsSVG = propsSVG;
         if (props)
             this.fillProps(props);
@@ -358,17 +315,6 @@ export class SCInput extends HTMLInputElement{
         this.id = id;
         this.onStart(props);
     }
-    
-    /**
-     *
-     * @returns {string|number|boolean|Date}
-     */
-    getValue(){
-        return this.value;
-    }
-    setValue(value){
-        this.value = value;
-    }
     onStart(props){}
     render(){}
 }
@@ -394,22 +340,8 @@ customElements.define('sc-input-number', SCInputNumber, {extends: 'input'})
 export class SCInputDate extends SCInput{
     constructor(value, name, id, props) {
         super(value, 'date', name, id, props);
-        if (typeof value === "object"){
-            this.valueAsDate = value;
-        }
         this.setAttribute("is", "sc-input-date");
     }
-    getValue(){
-        return this.valueAsDate;
-    }
-    setValue(value){
-        if (typeof value === "object"){
-            this.valueAsDate = value;
-            return;
-        }
-        this.value = value;
-    }
-    
 }
 customElements.define('sc-input-date', SCInputDate, {extends: 'input'})
 
@@ -479,59 +411,17 @@ export class SCSelect extends HTMLSelectElement{
     constructor(value, name, id, props) {
         super();
         this.setAttribute('is', 'sc-select');
-        this.id = id;
         this.startValue = value;
         this.name = name;
         this.onStart(props);
     }
     onStart(props){}
-    /**
-     *
-     * @returns {string|number|boolean|Date}
-     */
-    getValue(){
-        return this.value;
-    }
-    setValue(value){
-        this.value = value;
-    }
     afterRender(){
         this.value = this.startValue;
     }
 }
 mixin(SCSelect, SCMix);
 customElements.define('sc-select', SCSelect, {extends: 'select'})
-
-export class SCDataList extends HTMLDataListElement{
-    constructor(id, props) {
-        super();
-        this.id = id;
-        this.onStart(props);
-    }
-    onStart(props){}
-}
-mixin(SCDataList, SCMix);
-customElements.define('sc-datalist', SCDataList, {extends: 'datalist'})
-
-export class SCInputDataList extends SCGroup{
-
-    constructor(value, name, id, props) {
-        super(props);
-        if (!this.hasOwnProperty('datalistProps')) this.datalistProps = [];
-        if (!this.hasOwnProperty('inputProps')) this.inputProps = [];
-        if (!this.hasOwnProperty('idList')) this.idList = id + "_list";
-        this.fillProps({
-            items: {
-                input: new SCInputText(value, name, id, this.inputProps),
-                datalist: new SCDataList(this.idList, this.datalistProps)
-            }
-        })
-        this.items.input.setAttribute('list', this.idList);
-    }
-
-}
-mixin(SCInputDataList, SCMix);
-customElements.define('sc-input-datalist', SCInputDataList)
 
 export class SCInputBox extends SCGroup{
 
@@ -544,7 +434,9 @@ export class SCInputBox extends SCGroup{
         this.titleText = title;
         if (!this.hasOwnProperty('inputProps')) this.inputProps = {};
         if (!this.hasOwnProperty('labelProps')) this.labelProps = {};
+
     }
+
 
     fillContent(){
         this.items = {
@@ -572,6 +464,10 @@ export class SCInputBox extends SCGroup{
         return new SCInput(this.value, this.type, this.name, this.inputId, this.inputProps);
     }
 
+    /**
+     *
+     * @returns {Element|undefined}
+     */
     getLabel(){
         const result = new SCLabel(
             this.inputId,
@@ -705,6 +601,7 @@ export class SCWindow extends SCGroup{
         this.fillProps(props)
     }
 
+
     fillContent(){
         this.items = {
             close_box: this.getCloseBox(),
@@ -741,4 +638,3 @@ export class SCWindow extends SCGroup{
 
 }
 customElements.define("sc-window", SCWindow)
-

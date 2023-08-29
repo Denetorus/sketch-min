@@ -1,7 +1,7 @@
-import {SCButton, SCGroup, SCSpan, SCWindow} from "../../external/sk-cmp/sk-cmp.js";
+import {SCButton, SCGroup, SCSpan, SCTableRow, SCWindow} from "../../external/sk-cmp/sk-cmp.js";
+import {DBObject, DBObjectUID, DBTableObject} from "../../external/db/DBObject.js";
 import {ObjectAttributes} from "../../object/ObjectAttributes.js";
-import {DbObject} from "../../external/sk-cmp/sk-cmp-db-objects.js";
-import {InputBoxDB} from "./InputBoxDB.js";
+import {InputBox} from "../../pages/app/InputBox.js";
 
 export class WindowItem extends SCWindow{
 
@@ -22,15 +22,7 @@ export class WindowItem extends SCWindow{
         this.db = db;
         this.tableName = tableName;
         this.owner = owner;
-        this.object = new DbObject(this.db, this.tableName, key, {
-            fieldDescriptions: ObjectAttributes[this.tableName]
-        });
-    }
-
-    close(data){
-        const event = new CustomEvent("close", { detail: data });
-        this.dispatchEvent(event);
-        this.parentElement.closeWindow(this);
+        this.object = new DBObject(this.db, this.tableName, key, ObjectAttributes[this.tableName]);
     }
 
     getCloseBox() {
@@ -48,7 +40,7 @@ export class WindowItem extends SCWindow{
                 close: new SCButton({
                     items: ['X'],
                     onclick: function (){
-                        this.close(undefined);
+                        this.remove()
                     }.bind(this)
                 })
             }
@@ -75,17 +67,14 @@ export class WindowItem extends SCWindow{
                     items: ['Save'],
                     onclick: function (){
                         this.object.save()
-                            .then((data)=>{
-                                if (data.hasOwnProperty('ref')){
-                                    this.close(data.ref.uid);
-                                    return
+                            .then(()=>{
+                                    this.owner.render()
+                                    this.remove()
+                                },
+                                (error)=>{
+                                    console.error(error)
                                 }
-                                this.close(undefined)
-                            },
-                            (error)=>{
-                                console.error(error)
-                            }
-                        )
+                            )
                     }.bind(this)
                 }),
                 delete: new SCButton({
@@ -107,7 +96,7 @@ export class WindowItem extends SCWindow{
     }
 
     render(){
-        if (this.object.data[this.object.keyName]===-1){
+        if (this.object.data[this.object._keyName]===-1){
             this.fillContent();
             this.renderFields();
             super._render();
@@ -123,8 +112,8 @@ export class WindowItem extends SCWindow{
     renderFields(){
 
         const items = {}
-        for (const attrKey in this.object.fieldDescriptions){
-            if (this.object.fieldDescriptions[attrKey].show !== true)
+        for (const attrKey in this.object._attributes){
+            if (this.object._attributes[attrKey].show !== true)
                 continue;
             items[attrKey] = this.renderField(attrKey);
         }
@@ -132,16 +121,13 @@ export class WindowItem extends SCWindow{
     }
 
     renderField(fieldName){
-        return new InputBoxDB(
-            this.object,
-            fieldName,
-            {
-                inputProps: {
-                    attributes: {
-                        autocomplete: "off"
-                    }
-                }
-            }
+        const attr = this.object._attributes[fieldName];
+        return new InputBox(
+            this.object.data[fieldName],
+            attr.type, fieldName,
+            this.tableName+"_"+fieldName,
+            attr.title,
+            this.object.data
         );
     }
 

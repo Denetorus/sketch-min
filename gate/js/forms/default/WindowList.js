@@ -1,8 +1,8 @@
 import {SCButton, SCGroup, SCSpan, SCWindow} from "../../external/sk-cmp/sk-cmp.js";
 import {SCTableDB} from "../../external/sk-cmp/sk-cmp-db.js";
+import {DBTableObject} from "../../external/db/DBObject.js";
 import {ObjectAttributes} from "../../object/ObjectAttributes.js";
 import {WindowItem} from "./WindowItem.js";
-import {DBTableObject} from "../../external/sk-cmp/sk-cmp-db-objects.js";
 
 
 export class WindowList extends SCWindow{
@@ -49,27 +49,23 @@ export class WindowList extends SCWindow{
 
     getContentBox(){
 
-        const tableObject = new DBTableObject(this.db, this.tableName,{
-            fieldDescriptions:  ObjectAttributes[this.tableName],
-            _itemsParent: this.parentElement
-        });
-        const table = new SCTableDB(tableObject,{
-                addEventListeners: {
-                    dblclick: function (event) {
-                        if (event.target.tagName === "TD") {
+        const table = new SCTableDB(new DBTableObject(this.db, this.tableName, ObjectAttributes[this.tableName]),{
+            _itemsParent: this.parentElement,
+            addEventListeners: {
+                dblclick: function (event){
+                    if (event.target.tagName==="TD"){
 
-                            const ref = event.target.getAttribute('ref');
-                            if (ref === undefined) return;
+                        const ref = event.target.getAttribute('ref');
+                        if (ref===undefined) return;
 
-                            const newWindowItem = new WindowItem(this.object.db, this.object.tableName, ref, this)
-                            this.object._itemsParent.items.push(newWindowItem)
-                            this.object._itemsParent.appendChild(newWindowItem)
+                        const newWindowItem = new WindowItem(this.object.db, this.object._tableName, ref, this)
+                        this._itemsParent.items.push(newWindowItem)
+                        this._itemsParent.appendChild(newWindowItem)
 
-                        }
                     }
                 }
+            }
         });
-
         return new SCGroup({
             cssText: 'display: flex; flex-direction: column; margin-top: 10px; width: 100%; flex-grow: 1',
             items: {
@@ -86,9 +82,9 @@ export class WindowList extends SCWindow{
                 create: new SCButton({
                     items: ['Create'],
                     onclick: function (){
-                        const newWindowItem = new WindowItem(this.object.db, this.object.tableName, undefined, this)
-                        this.object._itemsParent.items.push(newWindowItem)
-                        this.object._itemsParent.appendChild(newWindowItem)
+                        const newWindowItem = new WindowItem(this.object.db, this.object._tableName, undefined, this)
+                        this._itemsParent.items.push(newWindowItem)
+                        this._itemsParent.appendChild(newWindowItem)
                     }.bind(table)
                 })
             }

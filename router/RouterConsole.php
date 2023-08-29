@@ -9,10 +9,6 @@ class RouterConsole extends \sketch\router\RouterConsole
     {
         return [
 
-            'upload' => [
-                'internal' => true,
-            ],
-
             'test' => [
                 'internal' => true,
             ],

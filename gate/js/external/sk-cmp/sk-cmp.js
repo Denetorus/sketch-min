@@ -21,7 +21,7 @@ const _renderHTML = function (){
 }
 const notRender = function (){}
 
-const SCMix = {
+export const SCMix = {
 
     onStart: function(props){
         this.used = true;
@@ -196,7 +196,7 @@ const SCMix = {
             if (typeof item === 'string'){
                 objParent.append(item);
             }else{
-                if (item.used)
+                if (item!==undefined && item.used)
                     objParent.appendChild(item);
             }
         }
@@ -241,11 +241,24 @@ export class SCForm extends HTMLFormElement{
 mixin(SCForm, SCMix);
 customElements.define('sc-form', SCForm, {extends: 'form'})
 
+export class SCA extends HTMLAnchorElement{
+    constructor(href, props={}) {
+        super();
+        this.setAttribute('href', href);
+        this.setAttribute("is", "sc-a")
+        this.onStart(props)
+    }
+    onStart(props){}
+}
+mixin(SCA, SCMix);
+customElements.define('sc-a', SCA, {extends: 'a'})
+
 export class SCHTML extends SCDiv{
     constructor(props={}) {
         super(props);
         this.setAttribute("is", "sc-html");
     }
+    
 }
 SCHTML.prototype._render = _renderHTML;
 customElements.define('sc-html', SCHTML, {extends: 'div'})
@@ -255,7 +268,7 @@ export class SCSVGBox extends SCHTML{
         super({
             items:[svgHtml]
         });
-        this.setAttribute("is", "sc-html");
+        this.setAttribute("is", "sc-svg");
         this.propsSVG = propsSVG;
         if (props)
             this.fillProps(props);
@@ -309,11 +322,37 @@ export class SCInput extends HTMLInputElement{
     constructor(value, type, name, id, props) {
         super();
         this.setAttribute("is", "sc-input");
-        this.value = value;
         this.type = type;
+        this.setValue(value)
         this.name = name;
         this.id = id;
         this.onStart(props);
+    }
+    
+    /**
+     *
+     * @returns {string|number|boolean|Date}
+     */
+    getValue(){
+        if (this.type==='checkbox'){
+            return this.checked;
+        }
+        return this.value;
+    }
+    setValue(value){
+        if (this.type==='checkbox'){
+            this.checked = value;
+            return;
+        }
+        if (this.type === 'file'){
+            if(value===undefined || value===null){
+                this.value = '';
+                return
+            }
+            this.value = String(value);
+            return;
+        }
+        this.value = value;
     }
     onStart(props){}
     render(){}
@@ -340,8 +379,22 @@ customElements.define('sc-input-number', SCInputNumber, {extends: 'input'})
 export class SCInputDate extends SCInput{
     constructor(value, name, id, props) {
         super(value, 'date', name, id, props);
+        if (typeof value === "object"){
+            this.valueAsDate = value;
+        }
         this.setAttribute("is", "sc-input-date");
     }
+    getValue(){
+        return this.valueAsDate;
+    }
+    setValue(value){
+        if (typeof value === "object"){
+            this.valueAsDate = value;
+            return;
+        }
+        this.value = value;
+    }
+    
 }
 customElements.define('sc-input-date', SCInputDate, {extends: 'input'})
 
@@ -416,6 +469,17 @@ export class SCSelect extends HTMLSelectElement{
         this.onStart(props);
     }
     onStart(props){}
+    /**
+     *
+     * @returns {string|number|boolean|Date}
+     */
+    getValue(){
+        return this.value;
+    }
+    setValue(value){
+        this.value = value;
+    }
+    
     afterRender(){
         this.value = this.startValue;
     }

@@ -2,9 +2,8 @@
 
 namespace sign;
 
-use sketch\sign\model\SignErrorModel;
-use sketch\sign\processor\SignProcessorError;
 use sketch\sign\SignBase;
+use sketch\sign\processor\SignProcessorError;
 
 class SignError extends SignBase
 {

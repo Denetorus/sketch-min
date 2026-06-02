@@ -1,5 +1,5 @@
 import {
-    mixin, SCGroup, SCHTML,
+    mixin, SCHTML,
     SCInputBox,
     SCLi, SCMix,
     SCOption,

@@ -199,7 +199,7 @@ export class ApiDBConnector extends DbConnector{
      */
     getRecord(tableName, key){
         return this.queryJson(
-            this.path+"/"+tableName+"?v="+this.version+"&"+key+"="+key,
+            this.path+"/"+tableName+"?v="+this.version+"&key="+key,
             {method: "GET", headers: this.connectParams}
         ).then(
             function (data){return Promise.resolve(data)},
@@ -265,14 +265,15 @@ export class ApiDBConnector extends DbConnector{
     queryJson(path, options){
         
         return new Promise((resolve, reject)=>{
-            
+
             const method = (options.hasOwnProperty("method")) ? options.method : "GET";
             const body = (options.hasOwnProperty("body") ? options.body : null);
-            
+
             const xhr = new XMLHttpRequest();
-            
+            xhr.withCredentials = true;
             xhr.open(method, path);
             xhr.responseType = "json";
+            xhr.setRequestHeader("Accept", "application/json");
             if (options.hasOwnProperty("headers")){
                 for (const key in options.headers) {
                     xhr.setRequestHeader(key, options.headers[key])
@@ -285,9 +286,24 @@ export class ApiDBConnector extends DbConnector{
             xhr.onerror = (error)=>{
                 reject(error)
             };
-            
+
         })
-        
+
+    //}
+
+        //     const method = (options.hasOwnProperty("method")) ? options.method : "GET";
+        //     const body = (options.hasOwnProperty("body") ? options.body : null);
+        //     //let headers = (options.hasOwnProperty("headers") ? options.headers : {});
+        //     let headers = {};
+        //     headers['Content-Type'] = 'application/json';
+        //
+        // return fetch(path, {method: method, headers: headers, body: body, credentials: 'include'})
+        //     .then(response =>response.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         return data
+        //     })
+        //
     }
     
     

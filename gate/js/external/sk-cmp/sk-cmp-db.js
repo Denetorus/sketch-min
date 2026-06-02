@@ -1,5 +1,5 @@
 import {
-    mixin, SCHTML,
+    mixin, SCGroup, SCHTML,
     SCInputBox,
     SCLi, SCMix,
     SCOption,
@@ -137,7 +137,7 @@ export class SCTableDB extends SCTable{
             head: new SCTableHead,
             body: new SCTableBody
         }
-        
+
         this.prepareHead();
         this.fillProps(props)
     }
@@ -189,8 +189,19 @@ export class SCTableDB extends SCTable{
         if (fieldDescription.type === 'number'){
             return {items: [value.toString()]}
         }
-    
+
+        if (fieldDescription.type === 'boolean'){
+            if(value === true){
+                return {items: ['+']}
+            }else{
+                return {items: ['-']}
+            }
+        }
+
         if (fieldDescription.type === 'date'){
+            if (value === undefined || value === null){
+                return {items: ['']}
+            }
             try{
                 return {items: [value.toLocaleDateString()]}
             }catch{

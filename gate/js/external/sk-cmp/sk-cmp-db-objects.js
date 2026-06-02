@@ -1,5 +1,5 @@
 // ========================================================================
-// DB OBJECT (Version 1.0.1 original) (C) 2023 Mylnikov Denis
+// DB OBJECT (Version 1.0.3 original) (C) 2023-2026 Mylnikov Denis
 // =========================================================================
 
 "use strict";
@@ -19,7 +19,7 @@ export class DbObject {
      * @param props.events.beforeSave {function} use before save object (if it returns 'true' save will not execute)
      * @param props.events.beforeLoad {function} use before load object (if it returns 'true' load will not execute)
      * @param props.events.beforeDelete {function} use before delete object (if it returns 'true' delete don't execute
-     * @param props.events.onError {function(code,message)} on different errors
+     * @param props.events.onError {function(code,message)} use after errors
      *
      */
     constructor(db, tableName, key= undefined, props={}) {
@@ -166,8 +166,8 @@ export class DbObject {
 
             this.db.getRecord(this.tableName, this.key)
                 .then(
-                    (data) => {
-                        this.fill(data)
+                    (rr) => {
+                        this.fill(rr.data)
                         resolve(true)
                     },
                     (error)=>{
@@ -286,7 +286,7 @@ export class DbObject {
     }
 
     /**
-     * Get json object data presentation to save
+     * Get JSON object data presentation to save
      *
      * @returns {string}
      */
@@ -411,8 +411,8 @@ export class DBTableObject{
             }
 
             this.db.getTable(this.tableName, props)
-                .then((data) => {
-                    this.fill(data);
+                .then((rr) => {
+                    this.fill(rr.data);
                     resolve(this.data);
                 })
                 .catch(reject);
@@ -736,22 +736,22 @@ export class TableSettings{
             sorts: []
         };
         for (const key of Object.keys(this.filters)) {
-            result.push(this.filters[key].toSave())
+            result.filters.push(this.filters[key].toSave())
         }
         for (const key of Object.keys(this.sorts)) {
-            result.push(this.sorts[key].toSave())
+            result.sorts.push(this.sorts[key].toSave())
         }
         return result;
     }
     
     /**
-     * Get filter rules like json data
+     * Get filter rules like JSON data
      *
      * @returns {string}
      */
-    toJSON(){
-        return JSON.stringify(this.toSave());
-    }
+    // toJSON(){
+    //     return JSON.stringify(this.toSave());
+    // }
     
 }
 
@@ -886,13 +886,13 @@ export class FilterRule {
     }
     
     /**
-     * Get filter rule like json data
+     * Get filter rule like JSON data
      *
      * @returns {string}
      */
-    toJSON(){
-        return JSON.stringify(this.toSave());
-    }
+    // toJSON(){
+    //     return JSON.stringify(this.toSave());
+    // }
     
 }
 
@@ -925,7 +925,19 @@ export class SortRule {
         })
     
     }
-    
+
+    toSave(){
+        return {
+            field: this.field,
+            isDesc: this.isDesc,
+        }
+
+    }
+
+    // toJSON(){
+    //     return JSON.stringify(this.toSave());
+    // }
+
 }
 
 export const FILTER_RULE_TYPE = {

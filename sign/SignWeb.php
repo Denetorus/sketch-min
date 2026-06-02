@@ -3,7 +3,7 @@
 namespace sign;
 
 use sketch\sign\SignBase;
-use database\DBMain\DB;
+use sketch\sign\processor\SignProcessorDB;
 use database\DBMain\object\users;
 
 class SignWeb extends SignBase
@@ -13,13 +13,13 @@ class SignWeb extends SignBase
     {
 
         return [
-            'class' => 'sketch\sign\model\SignDBModel',
-            'db' => new DB,
+            'class' => SignProcessorDB::class,
             'user' => new users()
         ];
 
-
     }
+
+
 
 
 }

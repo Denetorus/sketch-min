@@ -1,100 +1,69 @@
-import {SCButton, SCGroup, SCSpan, SCWindow} from "../../external/sk-cmp/sk-cmp.js";
+import {SCWindow} from "../../external/sk-cmp/sk-cmp.js";
 import {SCTableDB} from "../../external/sk-cmp/sk-cmp-db.js";
-import {ObjectAttributes} from "../../object/ObjectAttributes.js";
 import {WindowItem} from "./WindowItem.js";
 import {DBTableObject} from "../../external/sk-cmp/sk-cmp-db-objects.js";
+import {WindowListCommandBar} from "./WindowListCommandBar.js";
+import {WindowListContentBox} from "./WindowListContentBox.js";
+import {WindowHeaderPanel} from "./WindowHeaderPanel.js";
+
 
 
 export class WindowList extends SCWindow{
 
-    constructor(db, tableName) {
-        super({
-            styles: {
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                border: '1px solid black',
-                height: '100%',
-                width: '100%',
-                flexGrow: '1',
-                padding: '10px',
-                background: 'white',
-            },
-        });
+    constructor(db, objectSchema) {
+        super();
+        this.classList.add('window-list');
         this.db = db;
-        this.tableName = tableName;
+        this.objectSchema = objectSchema;
+        this.setTable();
     }
 
-    getCloseBox() {
-        return new SCGroup({
-            cssText: `
-                display: flex; 
-                flex-direction: row; 
-                justify-content: space-between;
-            `,
-            items: {
-                title: new SCSpan({
-                    items: [this.tableName],
-                    cssText: 'font-family: cursive; font-size: x-large'
-                }),
-                close: new SCButton({
-                    items: ['X'],
-                    onclick: function (){
-                        this.remove()
-                    }.bind(this)
-                })
-            }
-        })
+    updateTable(){
+        this.table.object.load();
+        this.table.render();
+    }
+
+    setTable(){
+        this.table = new SCTableDB(this.getTableObject());
+        this.ondblclick = this.event_dblclick.bind(this);
+    }
+
+    getWindowItem(key){
+        return new WindowItem(this.db, this.objectSchema, key, this)
+    }
+
+    getTableObject(){
+        return new DBTableObject(this.db, this.objectSchema.name,{
+            fieldDescriptions:  this.objectSchema.fieldDescriptions,
+            _itemsParent: this.parentElement,
+        });
+    }
+
+    getHeaderPanel() {
+        return new WindowHeaderPanel(this, this.objectSchema.titleList)
     }
 
     getContentBox(){
-
-        const tableObject = new DBTableObject(this.db, this.tableName,{
-            fieldDescriptions:  ObjectAttributes[this.tableName],
-            _itemsParent: this.parentElement
-        });
-        const table = new SCTableDB(tableObject,{
-                addEventListeners: {
-                    dblclick: function (event) {
-                        if (event.target.tagName === "TD") {
-
-                            const ref = event.target.getAttribute('ref');
-                            if (ref === undefined) return;
-
-                            const newWindowItem = new WindowItem(this.object.db, this.object.tableName, ref, this)
-                            this.object._itemsParent.items.push(newWindowItem)
-                            this.object._itemsParent.appendChild(newWindowItem)
-
-                        }
-                    }
-                }
-        });
-
-        return new SCGroup({
-            cssText: 'display: flex; flex-direction: column; margin-top: 10px; width: 100%; flex-grow: 1',
-            items: {
-                combar: this.getCommandBar(table),
-                table: table
-            }
-        });
+        return new WindowListContentBox(this);
     }
 
-    getCommandBar(table){
-        return new SCGroup({
-            cssText: 'display: flex; flex-direction: row;',
-            items: {
-                create: new SCButton({
-                    items: ['Create'],
-                    onclick: function (){
-                        const newWindowItem = new WindowItem(this.object.db, this.object.tableName, undefined, this)
-                        this.object._itemsParent.items.push(newWindowItem)
-                        this.object._itemsParent.appendChild(newWindowItem)
-                    }.bind(table)
-                })
-            }
-        })
+    getCommandBar(){
+        return new WindowListCommandBar(this)
+    }
+
+    event_dblclick(event) {
+        if (event.target.tagName === "TD") {
+
+            const ref = event.target.getAttribute('ref');
+            if (ref === undefined) return;
+
+            const newWindowItem = this.getWindowItem(ref)
+            this.parentElement.addWindow(newWindowItem);
+
+        }
     }
 
 
 }
 customElements.define("window-list", WindowList)
+

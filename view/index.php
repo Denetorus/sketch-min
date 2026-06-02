@@ -7,6 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Sketch</title>
+
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/sc-window.css">
 </head>
 <body>
     <h1>Welcome to SKETCH framework!!!</h1>

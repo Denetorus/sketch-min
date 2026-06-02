@@ -11,8 +11,8 @@ use sketch\SK;
 class MigrateController
 {
 
-    public $old_schema_file = ROOT."/database/DBMain/db_public_schema.json";
-    public $new_schema_file = ROOT."/database/DBMain/db_public_schema_new.json";
+    public string $old_schema_file = ROOT."/database/DBMain/db_public_schema.json";
+    public string $new_schema_file = ROOT."/database/DBMain/db_public_schema_new.json";
 
     public function actionIndex()
     {
@@ -72,14 +72,12 @@ use sketch\database\schema\ObjectMigration;"
             if ($table_name==='users') continue;
             $class_name = $table_name;
             $objectTable = '['.PHP_EOL;
-            foreach ($table['columns'] as $column_name=>$column){
+            foreach ($table['columns'] as $column){
                 if (!isset($column['uid'])){
                     exit('Undefined "uid" in table "'.$table_name.'"');
                 }
                 $objectTable .='          [ ';
-                if (isset($column['uid'])) {
-                    $objectTable .='"name" => "'.$column['uid'].'",';
-                }
+                $objectTable .='"name" => "'.$column['uid'].'",';
                 if (isset($column['type'])) {
                     $objectTable .='"type" => "'.$column['type'].'",';
                 }

@@ -1,0 +1,63 @@
+
+.window-combar-button{
+    margin: 2px 5px;
+    font-size: 1.2em;
+    background-color: white;
+    color: #009879;
+    border-color: #009879;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.window-combar-button:hover{
+    background-color: #009879;
+    color: white;
+
+}
+
+.window-list{
+    width: 100%;
+    flex-grow: 1;
+    padding: 10px;
+    background: white;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.window-list-combar{
+    margin: 10px 5px;
+}
+
+.window-list-content-box {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.window-item{
+    width: 100%;
+    flex-grow: 1;
+    padding: 10px;
+    background: white;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.window-item-combar{
+    margin: 10px 5px;
+}
+
+.window-item-content-box{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    width: 100%;
+    flex-grow: 1
+}
+
+.window-item-fields{
+    display: flex;
+    flex-direction: column
+}

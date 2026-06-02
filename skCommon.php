@@ -2,6 +2,7 @@
 
 define('ROOT', dirname(__FILE__));
 const VIEW = ROOT . '/view';
+const MODEL = ROOT . '/model';
 const VENDOR = ROOT . '/vendor';
 const CONFIG = ROOT . '/config';
 const SKETCH = VENDOR . '/denetorus/sketch';

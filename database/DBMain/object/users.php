@@ -5,10 +5,10 @@ namespace database\DBMain\object;
 
 
 use database\DBMain\DB;
-use sketch\database\DBRecord\ObjectBase;
+use database\DBMain\DBObjectBase;
 use sketch\database\UUID;
 
-class users extends ObjectBase
+class users extends DBObjectBase
 {
 
     public $table = "users";
@@ -17,11 +17,6 @@ class users extends ObjectBase
         'registration' => 0,
         'activated' => 1
     ];
-
-    public function setDB(): void
-    {
-        $this->db = DB::getInstance();
-    }
 
     public function generatePasswordHash(string $password):string
     {

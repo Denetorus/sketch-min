@@ -2,6 +2,7 @@
 
 namespace sign;
 
+use sketch\sign\processor\SignProcessorSuccess;
 use sketch\sign\SignBase;
 
 class SignConsole extends SignBase
@@ -9,7 +10,7 @@ class SignConsole extends SignBase
     public function options():array
     {
         return [
-            'class' => 'sketch\sign\model\SignWithoutModel',
+            'class' => SignProcessorSuccess::class,
         ];
 
     }

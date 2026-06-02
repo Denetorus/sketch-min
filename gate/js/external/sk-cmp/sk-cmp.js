@@ -193,11 +193,11 @@ export const SCMix = {
         }
         for (const key of Object.keys(this.items)) {
             const item = this.items[key];
+            if( item == null ) continue;
             if (typeof item === 'string'){
                 objParent.append(item);
-            }else{
-                if (item!==undefined && item.used)
-                    objParent.appendChild(item);
+            }else if (item.used){
+                objParent.appendChild(item);
             }
         }
     },
@@ -668,12 +668,12 @@ export class SCWindow extends SCGroup{
 
     fillContent(){
         this.items = {
-            close_box: this.getCloseBox(),
-            content_box: this.getContentBox()
+            headerPanel: this.getHeaderPanel(),
+            contentBox: this.getContentBox()
         }
     }
 
-    getCloseBox(){
+    getHeaderPanel(){
         return new SCGroup({
             cssText: `
                 display: flex; 
